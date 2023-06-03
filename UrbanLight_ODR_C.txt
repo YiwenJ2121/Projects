@@ -1,0 +1,31 @@
+/* Urban Traffic Light Using ODR
+ * use delay loop, 1 sec on 1 sec off
+ * default 16 MHz clock
+ * LD2 connects to PA5
+ */
+#include "stm32f4xx.h"
+void delayMs(int n);
+int main(void) {
+RCC->AHB1ENR |= 4;         /* enable GPIOC clock */
+GPIOC->MODER = 0x00000555; /* set pins C0-C5 to output mode */
+
+while(1) {
+GPIOC->ODR = 0x21;
+delayMs(3000);
+
+GPIOC->ODR = 0x22;
+delayMs(1000);
+
+GPIOC-> ODR = 0x0C;
+delayMs(3000);
+
+GPIOC-> ODR = 0x14;
+delayMs(1000);
+}
+}
+/* 16 MHz SYSCLK */
+void delayMs(int n) {
+int i;
+for (; n > 0; n--)
+for (i = 0; i < 799; i++) ;
+}
